@@ -2,9 +2,17 @@ import { MOCK_CHARTER } from "@/lib/mockData";
 
 export function CharterTimeline() {
   const steps = [
-    { label: "Before charter", date: "Schedule active", state: "done" },
-    { label: "Charter paused", date: `${MOCK_CHARTER.startDate} → ${MOCK_CHARTER.endDate}`, state: "current" },
-    { label: "Resume point", date: MOCK_CHARTER.endDate, state: "todo" },
+    {
+      label: "Before Charter",
+      date: "Alex Thomas -> Ben Harris -> Chris Morgan -> Daniel Reeves",
+      state: "done",
+    },
+    {
+      label: "Charter Mode",
+      date: `Rotation frozen · ${MOCK_CHARTER.startDate} -> ${MOCK_CHARTER.endDate}`,
+      state: "current",
+    },
+    { label: "After Charter", date: "Resumes with Chris Morgan", state: "todo" },
   ];
   return (
     <div className="panel p-5">
@@ -21,8 +29,8 @@ export function CharterTimeline() {
                   (s.state === "current"
                     ? "border-foreground bg-foreground"
                     : s.state === "done"
-                    ? "border-foreground"
-                    : "border-border")
+                      ? "border-foreground"
+                      : "border-border")
                 }
               />
               {i < steps.length - 1 && <div className="mt-1 h-10 w-px bg-border" />}

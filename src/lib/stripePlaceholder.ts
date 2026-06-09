@@ -4,23 +4,24 @@
 import type { PlanType, SubscriptionStatus } from "./types";
 import { setMockState } from "./authPlaceholder";
 
-export async function getSubscriptionStatus(
-  _userId: string
-): Promise<SubscriptionStatus> {
+export async function getSubscriptionStatus(_userId: string): Promise<SubscriptionStatus> {
   // TODO: read subscription from Supabase / Stripe
   return "active";
 }
 
-export async function createStripeCheckoutSession(planId: PlanType) {
-  // TODO: POST to /api/public/stripe/checkout returning a hosted checkout URL
-  console.info("[stripe placeholder] createStripeCheckoutSession", planId);
+export async function mockCreateCheckoutSession(planId: PlanType) {
+  // TODO: Replace with Stripe Checkout
+  console.info("[stripe placeholder] mockCreateCheckoutSession", planId);
   // Simulate successful payment for the demo flow:
   setTimeout(() => setMockState("logged_in_paid_new"), 600);
   return { url: "/payment-success" };
 }
 
-export async function openStripeCustomerPortal() {
-  // TODO: POST to /api/public/stripe/portal returning portal URL
-  console.info("[stripe placeholder] openStripeCustomerPortal");
+export async function mockOpenCustomerPortal() {
+  // TODO: Replace with Stripe Checkout
+  console.info("[stripe placeholder] mockOpenCustomerPortal");
   return { url: "#" };
 }
+
+export const createStripeCheckoutSession = mockCreateCheckoutSession;
+export const openStripeCustomerPortal = mockOpenCustomerPortal;

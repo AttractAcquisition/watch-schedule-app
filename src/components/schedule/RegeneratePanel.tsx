@@ -9,7 +9,8 @@ export function RegeneratePanel() {
         Regenerate Affected Watches
       </div>
       <p className="mt-2 text-sm text-muted-foreground">
-        When crew availability changes, regenerate only the affected watch blocks. Captain approval required before publishing.
+        When crew availability changes, regenerate only the affected watch blocks. Captain approval
+        required before publishing.
       </p>
       <div className="mt-4 flex gap-2">
         <Button

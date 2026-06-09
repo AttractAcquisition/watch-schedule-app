@@ -6,7 +6,10 @@ export function QuickActions() {
   const navigate = useNavigate();
   const actions: Array<{ label: string; onClick: () => void }> = [
     { label: "Generate Schedule", onClick: () => navigate({ to: "/watch-builder" }) },
-    { label: "Regenerate Affected Watches", onClick: () => toast("Regenerate placeholder — schedule engine not yet connected.") },
+    {
+      label: "Regenerate Affected Watches",
+      onClick: () => toast("Regenerate placeholder — schedule engine not yet connected."),
+    },
     { label: "Pause for Charter", onClick: () => navigate({ to: "/charter-mode" }) },
     { label: "Add Leave", onClick: () => navigate({ to: "/leave" }) },
     { label: "Export PDF", onClick: () => navigate({ to: "/reports" }) },

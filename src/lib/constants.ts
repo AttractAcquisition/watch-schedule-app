@@ -57,8 +57,7 @@ export const PLANS: PlanDef[] = [
     name: "Triple Watch",
     price: "£99",
     per: "/month",
-    blurb:
-      "For yachts operating Deck/OOW, Interior Watchkeeper, and Engineering OOW.",
+    blurb: "For yachts operating Deck/OOW, Interior Watchkeeper, and Engineering OOW.",
     features: [
       "Three independent watch systems",
       "Department-specific rules",
@@ -78,13 +77,13 @@ export const PLAN_LABEL: Record<PlanType, string> = {
 };
 
 export const NAV_ITEMS = [
-  { to: "/dashboard", label: "Dashboard" },
-  { to: "/crew", label: "Crew Database" },
-  { to: "/watch-builder", label: "Watch Builder" },
-  { to: "/calendar", label: "Calendar" },
-  { to: "/fairness", label: "Fairness Engine" },
-  { to: "/charter-mode", label: "Charter Mode" },
-  { to: "/leave", label: "Leave" },
-  { to: "/reports", label: "Reports & Export" },
-  { to: "/settings", label: "Settings" },
+  { to: "/dashboard", label: "Dashboard", description: "Rota command view" },
+  { to: "/crew", label: "Crew Database", description: "Departments and eligibility" },
+  { to: "/watch-builder", label: "Watch Builder", description: "Rules and draft generation" },
+  { to: "/calendar", label: "Calendar", description: "Day, week, month rota" },
+  { to: "/fairness", label: "Fairness Engine", description: "Balance and warnings" },
+  { to: "/charter-mode", label: "Charter Mode", description: "Pause and resume rotation" },
+  { to: "/leave", label: "Leave", description: "Availability changes" },
+  { to: "/reports", label: "Reports & Export", description: "Bridge and crew PDFs" },
+  { to: "/settings", label: "Settings", description: "Account and backend checklist" },
 ] as const;

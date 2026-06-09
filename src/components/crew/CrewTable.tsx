@@ -13,7 +13,7 @@ export function CrewTable({
 }) {
   return (
     <div className="panel overflow-x-auto">
-      <table className="w-full min-w-[800px] text-left text-sm">
+      <table className="w-full min-w-[980px] text-left text-sm">
         <thead className="border-b border-border text-[11px] uppercase tracking-wider text-muted-foreground">
           <tr>
             <th className="px-4 py-3 font-medium">Name</th>
@@ -21,14 +21,18 @@ export function CrewTable({
             <th className="px-4 py-3 font-medium">Department</th>
             <th className="px-4 py-3 font-medium">Watch eligible</th>
             <th className="px-4 py-3 font-medium">Eligible roles</th>
-            <th className="px-4 py-3 font-medium">Status</th>
-            <th className="px-4 py-3 font-medium">Leave</th>
+            <th className="px-4 py-3 font-medium">Current status</th>
+            <th className="px-4 py-3 font-medium">Leave dates</th>
+            <th className="px-4 py-3 font-medium">Last scheduled</th>
             <th className="px-4 py-3" />
           </tr>
         </thead>
         <tbody>
           {crew.map((c) => (
-            <tr key={c.id} className="border-b border-border/60 last:border-0 hover:bg-secondary/30">
+            <tr
+              key={c.id}
+              className="border-b border-border/60 last:border-0 hover:bg-secondary/30"
+            >
               <td className="px-4 py-3 font-medium">{c.name}</td>
               <td className="px-4 py-3 text-muted-foreground">{c.position}</td>
               <td className="px-4 py-3 text-muted-foreground capitalize">{c.department}</td>
@@ -43,6 +47,9 @@ export function CrewTable({
               </td>
               <td className="px-4 py-3 font-mono text-[11px] text-muted-foreground">
                 {c.leaveStart ? `${c.leaveStart} → ${c.leaveEnd}` : "—"}
+              </td>
+              <td className="px-4 py-3 font-mono text-[11px] text-muted-foreground">
+                {c.lastScheduled ?? "—"}
               </td>
               <td className="px-4 py-3 text-right">
                 <button

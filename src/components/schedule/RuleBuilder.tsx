@@ -6,10 +6,11 @@ export function RuleBuilder() {
     "Avoid multiple watch days in a row",
     "Balance weekend watches",
     "Balance night watches",
+    "Balance department load",
     "Enable Charter Mode",
-    "Enable PDF exports",
-    "Leave management enabled",
-    "Rest-hour aware warnings enabled",
+    "Enable Leave Management",
+    "Enable rest-hour aware warnings",
+    "Require Submit & Confirm before schedule goes live",
   ];
   return (
     <div className="panel divide-y divide-border">

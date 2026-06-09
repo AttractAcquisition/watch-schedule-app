@@ -33,11 +33,15 @@ export function ScheduleGrid({ filterDept }: { filterDept?: string }) {
                 <td className="px-3 py-2 text-muted-foreground">{r.label}</td>
                 {days.map((d) => {
                   const a = MOCK_SCHEDULE.assignments.find(
-                    (x) => x.date === d && x.blockLabel === b && x.role === r.id
+                    (x) => x.date === d && x.blockLabel === b && x.role === r.id,
                   );
                   const crew = MOCK_CREW.find((c) => c.id === a?.crewMemberId);
                   if (filterDept && filterDept !== "all" && crew?.department !== filterDept) {
-                    return <td key={d} className="px-3 py-2 text-muted-foreground/40">·</td>;
+                    return (
+                      <td key={d} className="px-3 py-2 text-muted-foreground/40">
+                        ·
+                      </td>
+                    );
                   }
                   return (
                     <td key={d} className="px-3 py-2">
@@ -48,7 +52,7 @@ export function ScheduleGrid({ filterDept }: { filterDept?: string }) {
                   );
                 })}
               </tr>
-            ))
+            )),
           )}
         </tbody>
       </table>

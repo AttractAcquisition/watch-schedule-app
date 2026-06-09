@@ -24,8 +24,8 @@ const STORAGE_KEY = "ws.mockAuthState";
 const MOCK_USER: User = {
   id: "user_demo",
   email: "captain@meridian.yacht",
-  fullName: "Capt. James Whitcombe",
-  initials: "JW",
+  fullName: "Captain James Carter",
+  initials: "JC",
 };
 
 function stateFor(mock: MockState): AuthState {
@@ -101,18 +101,16 @@ export function subscribeAuth(l: Listener): () => void {
 
 // ---- Placeholder backend functions ----
 
-export async function signInWithEmail(_email: string, _password: string) {
-  // TODO: connect to Supabase auth.signInWithPassword
+export async function mockLogin(_email = "captain@meridian.yacht", _password = "demo") {
+  // TODO: Replace with Supabase Auth
   setMockState("logged_in_paid_onboarded");
   return { ok: true };
 }
 
-export async function signUpWithEmail(
-  _email: string,
-  _password: string,
-  _plan?: PlanType
-) {
-  // TODO: connect to Supabase auth.signUp + create profile row
+export async function mockSignup(_email: string, _password: string, _plan?: PlanType) {
+  // TODO: Replace with Supabase Auth
+  // TODO: Replace with Supabase database insert/update
+  // TODO: Apply RLS policies before production
   setMockState("logged_in_unpaid");
   return { ok: true };
 }
@@ -127,7 +125,12 @@ export async function getCurrentUser() {
   return getAuthState().user;
 }
 
-export async function completeOnboarding() {
-  // TODO: persist onboarding completion in Supabase
+export async function mockCompleteOnboarding(_payload?: unknown) {
+  // TODO: Replace with Supabase database insert/update
+  // TODO: Apply RLS policies before production
   setMockState("logged_in_paid_onboarded");
 }
+
+export const signInWithEmail = mockLogin;
+export const signUpWithEmail = mockSignup;
+export const completeOnboarding = mockCompleteOnboarding;

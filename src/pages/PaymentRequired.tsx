@@ -1,12 +1,22 @@
 import { Button } from "@/components/ui/button";
 import { BRAND, PLANS } from "@/lib/constants";
-import { createStripeCheckoutSession } from "@/lib/stripePlaceholder";
+import { mockCreateCheckoutSession } from "@/lib/stripePlaceholder";
 import { Check } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { DevMockStatePanel } from "@/components/DevMockStatePanel";
 
 export default function PaymentRequired() {
   const navigate = useNavigate();
+  const [successOpen, setSuccessOpen] = useState(false);
   return (
     <div className="min-h-screen bg-background px-4 py-16 md:px-8">
       <div className="mx-auto max-w-5xl">
@@ -15,10 +25,11 @@ export default function PaymentRequired() {
             {BRAND.name}
           </div>
           <h1 className="mt-3 text-3xl font-semibold tracking-tight">
-            Choose your watch system
+            Choose your Watch Schedule plan
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            Pricing scales with the watch architecture you operate. Cancel any time.
+            Select the watch structure your vessel needs. Payment will be handled securely through
+            Stripe.
           </p>
         </div>
         <div className="grid gap-4 md:grid-cols-3">
@@ -26,8 +37,7 @@ export default function PaymentRequired() {
             <div
               key={p.id}
               className={
-                "panel relative flex flex-col p-6 " +
-                (p.popular ? "border-foreground" : "")
+                "panel relative flex flex-col p-6 " + (p.popular ? "border-foreground" : "")
               }
             >
               {p.popular && (
@@ -53,9 +63,9 @@ export default function PaymentRequired() {
               <Button
                 className="mt-6"
                 onClick={async () => {
-                  await createStripeCheckoutSession(p.id); // TODO: real Stripe checkout
-                  toast("Stripe checkout placeholder — backend connection required.");
-                  navigate({ to: "/payment-success" });
+                  await mockCreateCheckoutSession(p.id); // TODO: real Stripe checkout
+                  toast("Stripe Checkout placeholder. Backend connection required.");
+                  setSuccessOpen(true);
                 }}
               >
                 {p.cta}
@@ -63,7 +73,23 @@ export default function PaymentRequired() {
             </div>
           ))}
         </div>
+        <div className="mt-6">
+          <DevMockStatePanel compact />
+        </div>
       </div>
+      <Dialog open={successOpen} onOpenChange={setSuccessOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Payment successful - continue to onboarding</DialogTitle>
+            <DialogDescription>
+              Stripe Checkout placeholder completed. Backend connection required before production.
+            </DialogDescription>
+          </DialogHeader>
+          <Button onClick={() => navigate({ to: "/payment-success" })}>
+            Continue to /payment-success
+          </Button>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

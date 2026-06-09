@@ -16,11 +16,15 @@ export function FairnessScoreCard() {
           ["Total watch balance", f.totalWatchBalance],
           ["Weekend fairness", f.weekendFairness],
           ["Night watch balance", f.nightWatchBalance],
+          ["Consecutive-day risk", "Low"],
         ].map(([label, val]) => (
           <div key={String(label)} className="flex items-center gap-3 text-xs">
             <div className="w-32 text-muted-foreground">{label}</div>
             <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-secondary">
-              <div className="h-full bg-foreground" style={{ width: `${val}%` }} />
+              <div
+                className="h-full bg-foreground"
+                style={{ width: typeof val === "number" ? `${val}%` : "28%" }}
+              />
             </div>
             <div className="w-8 text-right font-mono text-muted-foreground">{val}</div>
           </div>

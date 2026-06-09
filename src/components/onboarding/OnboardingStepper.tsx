@@ -1,10 +1,4 @@
-export function OnboardingStepper({
-  steps,
-  current,
-}: {
-  steps: string[];
-  current: number;
-}) {
+export function OnboardingStepper({ steps, current }: { steps: string[]; current: number }) {
   return (
     <ol className="flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
       {steps.map((s, i) => {
@@ -18,8 +12,8 @@ export function OnboardingStepper({
                 (active
                   ? "border-foreground bg-foreground text-background"
                   : done
-                  ? "border-foreground text-foreground"
-                  : "border-border")
+                    ? "border-foreground text-foreground"
+                    : "border-border")
               }
             >
               {i + 1}

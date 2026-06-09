@@ -18,9 +18,11 @@ export function VesselSetupStep() {
           <Input defaultValue="M/Y Meridian" />
         </div>
         <div className="space-y-2">
-          <Label>Vessel size</Label>
+          <Label>Vessel length range</Label>
           <Select defaultValue="50-65">
-            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="30-50">30m–50m</SelectItem>
               <SelectItem value="50-65">50m–65m</SelectItem>
@@ -31,7 +33,9 @@ export function VesselSetupStep() {
         <div className="space-y-2">
           <Label>Operation type</Label>
           <Select defaultValue="private_charter">
-            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="private">Private</SelectItem>
               <SelectItem value="charter">Charter</SelectItem>
@@ -40,8 +44,8 @@ export function VesselSetupStep() {
           </Select>
         </div>
         <div className="space-y-2">
-          <Label>Captain / primary admin</Label>
-          <Input defaultValue="Capt. James Whitcombe" />
+          <Label>Captain / admin name</Label>
+          <Input defaultValue="Captain James Carter" />
         </div>
         <div className="space-y-2">
           <Label>Default timezone</Label>

@@ -46,10 +46,14 @@ export function LeaveDateRangeForm() {
         <div className="space-y-2">
           <Label>Crew member</Label>
           <Select value={crewId} onValueChange={setCrewId}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
             <SelectContent>
               {MOCK_CREW.map((c) => (
-                <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                <SelectItem key={c.id} value={c.id}>
+                  {c.name}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -57,10 +61,14 @@ export function LeaveDateRangeForm() {
         <div className="space-y-2">
           <Label>Status</Label>
           <Select value={status} onValueChange={(v) => setStatus(v as CrewStatus)}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
             <SelectContent>
               {STATUSES.map((s) => (
-                <SelectItem key={s.id} value={s.id}>{s.label}</SelectItem>
+                <SelectItem key={s.id} value={s.id}>
+                  {s.label}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -76,13 +84,21 @@ export function LeaveDateRangeForm() {
       </div>
       <div className="space-y-2">
         <Label>Notes</Label>
-        <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Optional context for the captain." />
+        <Textarea
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          placeholder="Optional context for the captain."
+        />
       </div>
       <div className="rounded-md border border-border bg-background/40 px-3 py-2 text-xs text-muted-foreground">
         Affected watches will be shown after saving. Captain approval required before publishing.
       </div>
       <div className="flex gap-2">
-        <Button type="button" variant="outline" onClick={() => toast("Affected watches recalculated (mock).")}>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => toast("Affected watches recalculated (mock).")}
+        >
           Regenerate affected watches
         </Button>
         <Button type="submit">Submit &amp; Confirm</Button>

@@ -16,17 +16,24 @@ export function ExportCard({
     <div className="panel flex flex-col p-5">
       <div className="text-sm font-medium">{title}</div>
       <p className="mt-1 flex-1 text-xs text-muted-foreground">{description}</p>
-      <Button
-        size="sm"
-        variant="outline"
-        className="mt-4 self-start"
-        onClick={async () => {
-          await exportSchedulePdf("run_1", variant); // TODO: real edge fn
-          toast(`${title} PDF placeholder — backend connection required.`);
-        }}
-      >
-        <Download className="h-3.5 w-3.5" /> Download
-      </Button>
+      <div className="mt-4 flex gap-2">
+        <Button size="sm" variant="outline" onClick={() => toast("PDF preview placeholder.")}>
+          Preview
+        </Button>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={async () => {
+            await exportSchedulePdf(variant, "run_1"); // TODO: generate PDF through backend function
+            toast(`${title} PDF placeholder — backend connection required.`);
+          }}
+        >
+          <Download className="h-3.5 w-3.5" /> Export PDF
+        </Button>
+      </div>
+      <div className="mt-3 font-mono text-[10px] text-muted-foreground">
+        TODO: generate PDF through backend function
+      </div>
     </div>
   );
 }

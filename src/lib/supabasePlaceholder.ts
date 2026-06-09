@@ -14,21 +14,25 @@ export async function getCrewMembers(_vesselId: string): Promise<CrewMember[]> {
   return MOCK_CREW;
 }
 
-export async function saveCrewMembers(
-  _vesselId: string,
-  crew: CrewMember[]
-) {
-  // TODO: upsert crew_members
-  console.info("[supabase placeholder] saveCrewMembers", crew.length);
+export async function mockSaveCrewDatabase(_vesselId: string, crew: CrewMember[]) {
+  // TODO: Replace with Supabase database insert/update
+  // TODO: Apply RLS policies before production
+  console.info("[supabase placeholder] mockSaveCrewDatabase", crew.length);
   return { ok: true };
 }
 
-export async function uploadCrewListPhoto(_file: File) {
-  // TODO: upload to Supabase Storage bucket "crew-list-uploads"
+export async function mockUploadCrewList(_file?: File) {
+  // TODO: Replace with Supabase database insert/update
+  // TODO: Apply RLS policies before production
   return { fileId: "upload_mock_1" };
 }
 
-export async function extractCrewFromPhoto(_fileId: string) {
-  // TODO: invoke Edge Function ocr-crew-extract
+export async function mockExtractCrewFromPhoto(_fileId: string) {
+  // TODO: Replace with Supabase Edge Function
+  // TODO: Apply RLS policies before production
   return MOCK_CREW.slice(0, 8);
 }
+
+export const saveCrewMembers = mockSaveCrewDatabase;
+export const uploadCrewListPhoto = mockUploadCrewList;
+export const extractCrewFromPhoto = mockExtractCrewFromPhoto;

@@ -3,12 +3,7 @@
 
 export type PlanType = "solo_watch" | "dual_watch" | "triple_watch";
 
-export type SubscriptionStatus =
-  | "none"
-  | "active"
-  | "past_due"
-  | "canceled"
-  | "trialing";
+export type SubscriptionStatus = "none" | "active" | "past_due" | "canceled" | "trialing";
 
 export interface User {
   id: string;
@@ -17,33 +12,18 @@ export interface User {
   initials: string;
 }
 
-export type Department =
-  | "command"
-  | "deck"
-  | "interior"
-  | "engineering"
-  | "unassigned";
+export type Department = "command" | "deck" | "interior" | "engineering" | "unassigned";
 
-export type CrewStatus =
-  | "active"
-  | "on_leave"
-  | "sick"
-  | "off_vessel"
-  | "training"
-  | "unavailable";
+export type CrewStatus = "active" | "on_leave" | "sick" | "off_vessel" | "training" | "unavailable";
 
 export type WatchMode = "solo" | "dual" | "triple";
 
-export type WatchRole =
-  | "watchkeeper"
-  | "oow"
-  | "deck_watch"
-  | "interior_watch"
-  | "engineering_oow";
+export type WatchRole = "watchkeeper" | "oow" | "deck_watch" | "interior_watch" | "engineering_oow";
 
 export interface Vessel {
   id: string;
   name: string;
+  lengthMeters: number;
   sizeRange: "30-50" | "50-65" | "60-120";
   operationType: "private" | "charter" | "private_charter";
   captainName: string;
@@ -62,6 +42,8 @@ export interface CrewMember {
   status: CrewStatus;
   leaveStart?: string;
   leaveEnd?: string;
+  notes?: string;
+  lastScheduled?: string;
 }
 
 export interface WatchTemplate {
@@ -120,7 +102,13 @@ export interface FairnessScore {
   nightWatchBalance: number;
   consecutiveDayRisk: number;
   departmentBalance: number;
-  perCrew: { crewMemberId: string; score: number; watches: number; nights: number; weekends: number }[];
+  perCrew: {
+    crewMemberId: string;
+    score: number;
+    watches: number;
+    nights: number;
+    weekends: number;
+  }[];
   warnings: string[];
 }
 

@@ -10,14 +10,15 @@ import { ReviewSetupStep } from "@/components/onboarding/ReviewSetupStep";
 import { completeOnboarding } from "@/lib/authPlaceholder";
 import { useNavigate } from "@tanstack/react-router";
 import { BRAND } from "@/lib/constants";
+import { DevMockStatePanel } from "@/components/DevMockStatePanel";
 
 const STEPS = [
-  "Vessel Profile",
-  "Crew List Import",
-  "Department Review",
-  "Watch Mode Setup",
-  "Rules & Availability",
-  "Review & Create Dashboard",
+  "Set up your vessel",
+  "Import your crew list",
+  "Confirm departments and watch eligibility",
+  "Choose the watch structure your vessel runs",
+  "Set your rotation rules",
+  "Review vessel setup",
 ];
 
 export default function Onboarding() {
@@ -31,6 +32,10 @@ export default function Onboarding() {
           {BRAND.name} · Vessel Setup
         </div>
         <h1 className="text-2xl font-semibold tracking-tight">{STEPS[step]}</h1>
+        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+          Premium setup wizard for vessel profile, crew confirmation, watch structure, and rota
+          rules. Backend persistence is mocked for this demo.
+        </p>
         <div className="mt-5">
           <OnboardingStepper steps={STEPS} current={step} />
         </div>
@@ -61,9 +66,12 @@ export default function Onboarding() {
                 navigate({ to: "/dashboard" });
               }}
             >
-              Create Dashboard
+              Create Vessel Dashboard
             </Button>
           )}
+        </div>
+        <div className="mt-6">
+          <DevMockStatePanel compact />
         </div>
       </div>
     </div>

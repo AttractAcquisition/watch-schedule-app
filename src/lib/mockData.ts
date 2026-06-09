@@ -13,28 +13,187 @@ import type {
 export const MOCK_VESSEL: Vessel = {
   id: "vessel_meridian",
   name: "M/Y Meridian",
+  lengthMeters: 65,
   sizeRange: "50-65",
   operationType: "private_charter",
-  captainName: "Capt. James Whitcombe",
+  captainName: "Captain James Carter",
   timezone: "Europe/Monaco",
   plan: "triple_watch",
 };
 
 export const MOCK_CREW: CrewMember[] = [
-  { id: "c1", vesselId: "vessel_meridian", name: "James Whitcombe", position: "Captain", department: "command", watchEligible: true, eligibleRoles: ["oow", "watchkeeper"], status: "active" },
-  { id: "c2", vesselId: "vessel_meridian", name: "Oliver Hastings", position: "Chief Officer", department: "deck", watchEligible: true, eligibleRoles: ["oow", "deck_watch"], status: "active" },
-  { id: "c3", vesselId: "vessel_meridian", name: "Marco Bellini", position: "Second Officer", department: "deck", watchEligible: true, eligibleRoles: ["oow", "deck_watch"], status: "active" },
-  { id: "c4", vesselId: "vessel_meridian", name: "Henrik Larsen", position: "Bosun", department: "deck", watchEligible: true, eligibleRoles: ["deck_watch"], status: "active" },
-  { id: "c5", vesselId: "vessel_meridian", name: "Tom Reeves", position: "Lead Deckhand", department: "deck", watchEligible: true, eligibleRoles: ["deck_watch"], status: "active" },
-  { id: "c6", vesselId: "vessel_meridian", name: "Sam O'Connor", position: "Deckhand", department: "deck", watchEligible: true, eligibleRoles: ["deck_watch"], status: "on_leave", leaveStart: "2026-06-08", leaveEnd: "2026-06-14" },
-  { id: "c7", vesselId: "vessel_meridian", name: "Dario Conti", position: "Chief Engineer", department: "engineering", watchEligible: true, eligibleRoles: ["engineering_oow"], status: "active" },
-  { id: "c8", vesselId: "vessel_meridian", name: "Anika Patel", position: "Second Engineer", department: "engineering", watchEligible: true, eligibleRoles: ["engineering_oow"], status: "active" },
-  { id: "c9", vesselId: "vessel_meridian", name: "Lukas Weiss", position: "Third Engineer", department: "engineering", watchEligible: true, eligibleRoles: ["engineering_oow"], status: "training" },
-  { id: "c10", vesselId: "vessel_meridian", name: "Sophie Laurent", position: "Chief Stewardess", department: "interior", watchEligible: true, eligibleRoles: ["interior_watch"], status: "active" },
-  { id: "c11", vesselId: "vessel_meridian", name: "Elena Moretti", position: "Second Stewardess", department: "interior", watchEligible: true, eligibleRoles: ["interior_watch"], status: "active" },
-  { id: "c12", vesselId: "vessel_meridian", name: "Hana Suzuki", position: "Stewardess", department: "interior", watchEligible: true, eligibleRoles: ["interior_watch"], status: "active" },
-  { id: "c13", vesselId: "vessel_meridian", name: "Pierre Dubois", position: "Head Chef", department: "interior", watchEligible: false, eligibleRoles: [], status: "active" },
-  { id: "c14", vesselId: "vessel_meridian", name: "Mateus Silva", position: "Deckhand", department: "deck", watchEligible: true, eligibleRoles: ["deck_watch"], status: "sick" },
+  {
+    id: "c1",
+    vesselId: "vessel_meridian",
+    name: "Captain James Carter",
+    position: "Captain",
+    department: "command",
+    watchEligible: true,
+    eligibleRoles: ["oow", "watchkeeper"],
+    status: "active",
+    notes: "Captain/admin user. Final schedule approver.",
+    lastScheduled: "2026-06-06",
+  },
+  {
+    id: "c2",
+    vesselId: "vessel_meridian",
+    name: "Chief Officer Sarah Mills",
+    position: "Chief Officer",
+    department: "command",
+    watchEligible: true,
+    eligibleRoles: ["oow", "deck_watch"],
+    status: "active",
+    notes: "Primary OOW for night bridge watches.",
+    lastScheduled: "2026-06-09",
+  },
+  {
+    id: "c3",
+    vesselId: "vessel_meridian",
+    name: "Bosun Daniel Reeves",
+    position: "Bosun",
+    department: "deck",
+    watchEligible: true,
+    eligibleRoles: ["deck_watch", "watchkeeper"],
+    status: "active",
+    notes: "Deck lead, prefers early morning coverage.",
+    lastScheduled: "2026-06-08",
+  },
+  {
+    id: "c4",
+    vesselId: "vessel_meridian",
+    name: "Deckhand Alex Thomas",
+    position: "Deckhand",
+    department: "deck",
+    watchEligible: true,
+    eligibleRoles: ["deck_watch", "watchkeeper"],
+    status: "active",
+    notes: "Assigned before charter pause.",
+    lastScheduled: "2026-06-07",
+  },
+  {
+    id: "c5",
+    vesselId: "vessel_meridian",
+    name: "Deckhand Ben Harris",
+    position: "Deckhand",
+    department: "deck",
+    watchEligible: true,
+    eligibleRoles: ["deck_watch", "watchkeeper"],
+    status: "active",
+    notes: "Assigned before charter pause.",
+    lastScheduled: "2026-06-08",
+  },
+  {
+    id: "c6",
+    vesselId: "vessel_meridian",
+    name: "Deckhand Chris Morgan",
+    position: "Deckhand",
+    department: "deck",
+    watchEligible: true,
+    eligibleRoles: ["deck_watch", "watchkeeper"],
+    status: "active",
+    notes: "Next in deck rotation after charter resumes.",
+    lastScheduled: "2026-06-05",
+  },
+  {
+    id: "c7",
+    vesselId: "vessel_meridian",
+    name: "Chief Engineer Marco Rossi",
+    position: "Chief Engineer",
+    department: "engineering",
+    watchEligible: true,
+    eligibleRoles: ["engineering_oow"],
+    status: "active",
+    notes: "Appears twice this week due to limited engineering availability.",
+    lastScheduled: "2026-06-09",
+  },
+  {
+    id: "c8",
+    vesselId: "vessel_meridian",
+    name: "Second Engineer Luca Bianchi",
+    position: "Second Engineer",
+    department: "engineering",
+    watchEligible: true,
+    eligibleRoles: ["engineering_oow"],
+    status: "training",
+    leaveStart: "2026-06-10",
+    leaveEnd: "2026-06-12",
+    notes: "Training course affects engineering OOW coverage.",
+    lastScheduled: "2026-06-07",
+  },
+  {
+    id: "c9",
+    vesselId: "vessel_meridian",
+    name: "ETO Nathan Clarke",
+    position: "ETO",
+    department: "engineering",
+    watchEligible: true,
+    eligibleRoles: ["engineering_oow"],
+    status: "active",
+    notes: "Electrical systems escalation cover.",
+    lastScheduled: "2026-06-08",
+  },
+  {
+    id: "c10",
+    vesselId: "vessel_meridian",
+    name: "Chief Stew Emma Jones",
+    position: "Chief Stew",
+    department: "interior",
+    watchEligible: true,
+    eligibleRoles: ["interior_watch"],
+    status: "active",
+    notes: "Interior lead, approves stewardess swaps.",
+    lastScheduled: "2026-06-07",
+  },
+  {
+    id: "c11",
+    vesselId: "vessel_meridian",
+    name: "Second Stew Lisa Green",
+    position: "Second Stew",
+    department: "interior",
+    watchEligible: true,
+    eligibleRoles: ["interior_watch"],
+    status: "on_leave",
+    leaveStart: "2026-06-12",
+    leaveEnd: "2026-06-13",
+    notes: "Two confirmed interior watches affected.",
+    lastScheduled: "2026-06-09",
+  },
+  {
+    id: "c12",
+    vesselId: "vessel_meridian",
+    name: "Stewardess Sophie White",
+    position: "Stewardess",
+    department: "interior",
+    watchEligible: true,
+    eligibleRoles: ["interior_watch"],
+    status: "active",
+    notes: "Available for late interior watches.",
+    lastScheduled: "2026-06-08",
+  },
+  {
+    id: "c13",
+    vesselId: "vessel_meridian",
+    name: "Stewardess Mia Brooks",
+    position: "Stewardess",
+    department: "interior",
+    watchEligible: true,
+    eligibleRoles: ["interior_watch"],
+    status: "active",
+    notes: "Available for guest-facing evening coverage.",
+    lastScheduled: "2026-06-06",
+  },
+  {
+    id: "c14",
+    vesselId: "vessel_meridian",
+    name: "Chef Oliver Grant",
+    position: "Chef",
+    department: "interior",
+    watchEligible: false,
+    eligibleRoles: [],
+    status: "active",
+    notes: "Not normally assigned to watch rota.",
+    lastScheduled: "—",
+  },
 ];
 
 const today = new Date();
@@ -58,17 +217,45 @@ export const MOCK_SCHEDULE: ScheduleRun = {
       { label: "04:00–08:00", role: "oow" as const, deckRole: "deck_watch" as const },
       { label: "20:00–00:00", role: "oow" as const, deckRole: "deck_watch" as const },
     ];
-    const oowCrew = ["c2", "c3", "c1"];
-    const deckCrew = ["c4", "c5", "c14"];
-    const intCrew = ["c10", "c11", "c12"];
-    const engCrew = ["c7", "c8", "c9"];
+    const oowCrew = ["c2", "c1", "c2"];
+    const deckCrew = ["c4", "c5", "c6", "c3"];
+    const intCrew = ["c11", "c12", "c13", "c10"];
+    const engCrew = ["c7", "c9", "c7"];
     const out: ScheduleRun["assignments"] = [];
     for (let d = 0; d < 7; d++) {
       blocks.forEach((b, i) => {
-        out.push({ id: `a-${d}-oow-${i}`, scheduleRunId: "run_1", date: isoOffset(d), blockLabel: b.label, role: "oow", crewMemberId: oowCrew[(d + i) % oowCrew.length] });
-        out.push({ id: `a-${d}-deck-${i}`, scheduleRunId: "run_1", date: isoOffset(d), blockLabel: b.label, role: "deck_watch", crewMemberId: deckCrew[(d + i) % deckCrew.length] });
-        out.push({ id: `a-${d}-int-${i}`, scheduleRunId: "run_1", date: isoOffset(d), blockLabel: b.label, role: "interior_watch", crewMemberId: intCrew[(d + i) % intCrew.length] });
-        out.push({ id: `a-${d}-eng-${i}`, scheduleRunId: "run_1", date: isoOffset(d), blockLabel: b.label, role: "engineering_oow", crewMemberId: engCrew[(d + i) % engCrew.length] });
+        out.push({
+          id: `a-${d}-oow-${i}`,
+          scheduleRunId: "run_1",
+          date: isoOffset(d),
+          blockLabel: b.label,
+          role: "oow",
+          crewMemberId: oowCrew[(d + i) % oowCrew.length],
+        });
+        out.push({
+          id: `a-${d}-deck-${i}`,
+          scheduleRunId: "run_1",
+          date: isoOffset(d),
+          blockLabel: b.label,
+          role: "deck_watch",
+          crewMemberId: deckCrew[(d + i) % deckCrew.length],
+        });
+        out.push({
+          id: `a-${d}-int-${i}`,
+          scheduleRunId: "run_1",
+          date: isoOffset(d),
+          blockLabel: b.label,
+          role: "interior_watch",
+          crewMemberId: intCrew[(d + i) % intCrew.length],
+        });
+        out.push({
+          id: `a-${d}-eng-${i}`,
+          scheduleRunId: "run_1",
+          date: isoOffset(d),
+          blockLabel: b.label,
+          role: "engineering_oow",
+          crewMemberId: engCrew[(d + i) % engCrew.length],
+        });
       });
     }
     return out;
@@ -90,8 +277,10 @@ export const MOCK_FAIRNESS: FairnessScore = {
     weekends: 1 + (i % 2),
   })),
   warnings: [
-    "Potential rest-hour conflict for Marco Bellini on " + isoOffset(2) + " — captain approval required.",
-    "Sam O'Connor on leave during scheduled deck watch — regenerate to reallocate.",
+    "Potential repeated night watch for Chief Engineer Marco Rossi on " +
+      isoOffset(2) +
+      " - captain approval required.",
+    "Second Stew Lisa Green is on leave during two confirmed interior watches - regenerate affected watches.",
   ],
 };
 
@@ -103,13 +292,26 @@ export const MOCK_CHARTER: CharterPause = {
   scope: "selected",
   keepEngineering: true,
   keepSecurity: true,
-  active: false,
+  active: true,
 };
 
 export const MOCK_LEAVE: LeaveRecord[] = [
-  { id: "l1", crewMemberId: "c6", status: "on_leave", startDate: "2026-06-08", endDate: "2026-06-14", notes: "Pre-booked leave." },
-  { id: "l2", crewMemberId: "c14", status: "sick", startDate: isoOffset(0), endDate: isoOffset(2), notes: "Doctor's note submitted." },
-  { id: "l3", crewMemberId: "c9", status: "training", startDate: isoOffset(1), endDate: isoOffset(3), notes: "AEC course." },
+  {
+    id: "l1",
+    crewMemberId: "c11",
+    status: "on_leave",
+    startDate: "2026-06-12",
+    endDate: "2026-06-13",
+    notes: "Pre-booked leave.",
+  },
+  {
+    id: "l2",
+    crewMemberId: "c8",
+    status: "training",
+    startDate: isoOffset(1),
+    endDate: isoOffset(3),
+    notes: "Engineering course.",
+  },
 ];
 
 export const MOCK_EXPORTS = [

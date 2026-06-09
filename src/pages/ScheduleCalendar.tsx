@@ -20,12 +20,30 @@ export default function ScheduleCalendar() {
     <AppShell>
       <PageHeader
         eyebrow="Calendar View"
-        title="Weekly watch calendar"
-        description="View, filter, and export the current week's watches. Charter and leave overlays included."
+        title="Calendar View"
+        description="View the confirmed rota across days, weeks, departments, and charter pauses."
         actions={
           <>
-            <Button variant="outline" size="sm" onClick={() => toast("Regenerate placeholder.")}>Regenerate</Button>
-            <Button size="sm" onClick={() => toast("PDF export placeholder.")}>Export PDF</Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => toast("Regenerate schedule placeholder.")}
+            >
+              Regenerate schedule
+            </Button>
+            <Button size="sm" onClick={() => toast("PDF export placeholder.")}>
+              Export PDF
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => toast("Add leave placeholder.")}>
+              Add leave
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => toast("Pause for charter placeholder.")}
+            >
+              Pause for charter
+            </Button>
           </>
         }
       />
@@ -36,10 +54,13 @@ export default function ScheduleCalendar() {
             <TabsTrigger value="day">Day</TabsTrigger>
             <TabsTrigger value="week">Week</TabsTrigger>
             <TabsTrigger value="month">Month</TabsTrigger>
+            <TabsTrigger value="department">Department</TabsTrigger>
           </TabsList>
         </Tabs>
         <Select value={dept} onValueChange={setDept}>
-          <SelectTrigger className="w-44"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="w-44">
+            <SelectValue />
+          </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All departments</SelectItem>
             <SelectItem value="deck">Deck</SelectItem>
@@ -54,10 +75,12 @@ export default function ScheduleCalendar() {
 
       <div className="mt-4 grid gap-4 md:grid-cols-2">
         <div className="panel p-4 text-xs text-muted-foreground">
-          <span className="text-foreground">Charter overlay</span> · paused from {MOCK_CHARTER.startDate} to {MOCK_CHARTER.endDate}.
+          <span className="text-foreground">Charter overlay</span> · paused from{" "}
+          {MOCK_CHARTER.startDate} to {MOCK_CHARTER.endDate}.
         </div>
         <div className="panel p-4 text-xs text-muted-foreground">
-          <span className="text-foreground">Leave markers</span> · Sam O'Connor (on leave), Lukas Weiss (training).
+          <span className="text-foreground">Leave markers</span> · Lisa Green (on leave), Luca
+          Bianchi (training). Draft and Confirmed badges are shown in the grid.
         </div>
       </div>
     </AppShell>

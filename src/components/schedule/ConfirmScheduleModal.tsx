@@ -23,7 +23,8 @@ export function ConfirmScheduleModal({
         <DialogHeader>
           <DialogTitle>Submit &amp; Confirm schedule</DialogTitle>
           <DialogDescription>
-            This will publish the schedule to crew. Captain approval is required. Rest-hour aware warnings will be reviewed before publishing.
+            This will publish the schedule to crew. Captain approval is required. Rest-hour aware
+            warnings will be reviewed before publishing.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>

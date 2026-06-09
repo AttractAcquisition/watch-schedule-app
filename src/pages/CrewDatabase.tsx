@@ -22,22 +22,40 @@ export default function CrewDatabase() {
   const [open, setOpen] = useState(false);
 
   const filtered = crew.filter(
-    (c) => (dept === "all" || c.department === dept) && (status === "all" || c.status === status)
+    (c) => (dept === "all" || c.department === dept) && (status === "all" || c.status === status),
   );
 
   return (
     <AppShell>
       <PageHeader
         eyebrow="Crew Database"
-        title="Crew & watch eligibility"
-        description="Manage crew records, departments, and watch eligibility. Captain approval required before publishing schedules."
+        title="Crew Database"
+        description="Manage crew departments, watch eligibility, and availability for rota generation."
         actions={
           <>
-            <Button variant="outline" size="sm" onClick={() => toast("Upload crew list placeholder.")}>
-              Upload crew list
-            </Button>
             <Button size="sm" onClick={() => toast("Add crew member placeholder.")}>
               Add crew member
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => toast("Import crew list placeholder.")}
+            >
+              Import crew list
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => toast("Export crew list placeholder.")}
+            >
+              Export crew list
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => toast("No unassigned crew in mock data.")}
+            >
+              Review unassigned crew
             </Button>
           </>
         }
@@ -45,7 +63,9 @@ export default function CrewDatabase() {
 
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <Select value={dept} onValueChange={(v) => setDept(v as Department | "all")}>
-          <SelectTrigger className="w-44"><SelectValue placeholder="Department" /></SelectTrigger>
+          <SelectTrigger className="w-44">
+            <SelectValue placeholder="Department" />
+          </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All departments</SelectItem>
             <SelectItem value="command">Command</SelectItem>
@@ -56,7 +76,9 @@ export default function CrewDatabase() {
           </SelectContent>
         </Select>
         <Select value={status} onValueChange={(v) => setStatus(v as CrewStatus | "all")}>
-          <SelectTrigger className="w-44"><SelectValue placeholder="Status" /></SelectTrigger>
+          <SelectTrigger className="w-44">
+            <SelectValue placeholder="Status" />
+          </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All statuses</SelectItem>
             <SelectItem value="active">Active</SelectItem>
@@ -81,6 +103,11 @@ export default function CrewDatabase() {
       />
 
       <CrewMemberDrawer open={open} member={editing} onOpenChange={setOpen} />
+      {filtered.length === 0 && (
+        <div className="mt-4 panel p-4 text-xs text-muted-foreground">
+          No crew match these filters. Import a crew list, add a crew member, or clear filters.
+        </div>
+      )}
     </AppShell>
   );
 }

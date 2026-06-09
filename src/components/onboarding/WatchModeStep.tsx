@@ -10,7 +10,8 @@ export function WatchModeStep() {
       <div className="panel p-5 text-sm text-muted-foreground">
         {mode === "solo" && "Configured as: One watchkeeper per watch block."}
         {mode === "dual" && "Configured as: Watchkeeper + OOW, or Day/Night rotation."}
-        {mode === "triple" && "Configured as: Deck Watchkeeper / OOW, Interior Watchkeeper, Engineering OOW."}
+        {mode === "triple" &&
+          "Configured as: Deck Watchkeeper / OOW, Interior Watchkeeper, Engineering OOW."}
       </div>
     </div>
   );

@@ -21,6 +21,17 @@ export function CharterStatusCard() {
         Engineering watch {c.keepEngineering ? "maintained" : "paused"} · Security{" "}
         {c.keepSecurity ? "maintained" : "paused"}
       </div>
+      <p className="mt-3 text-sm text-muted-foreground">
+        Charter Mode active. Normal rotation is frozen and will resume with Chris Morgan on Monday.
+      </p>
+      <div className="mt-4 flex gap-2">
+        <button className="rounded-md border border-border px-3 py-1.5 text-xs hover:bg-secondary">
+          View Charter Mode
+        </button>
+        <button className="rounded-md border border-border px-3 py-1.5 text-xs hover:bg-secondary">
+          Resume Schedule
+        </button>
+      </div>
     </div>
   );
 }

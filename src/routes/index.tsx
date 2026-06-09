@@ -6,9 +6,16 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Watch Schedule — Professional watch scheduling for superyacht teams" },
-      { name: "description", content: "Fair, professional watch rotas for superyacht captains and crew. Solo, Dual, and Triple Watch systems with fairness balancing, charter mode, and rest-hour aware warnings." },
+      {
+        name: "description",
+        content:
+          "Fair, professional watch rotas for superyacht captains and crew. Solo, Dual, and Triple Watch systems with fairness balancing, charter mode, and rest-hour aware warnings.",
+      },
       { property: "og:title", content: "Watch Schedule" },
-      { property: "og:description", content: "Professional watch scheduling for superyacht teams." },
+      {
+        property: "og:description",
+        content: "Professional watch scheduling for superyacht teams.",
+      },
     ],
   }),
   component: Index,

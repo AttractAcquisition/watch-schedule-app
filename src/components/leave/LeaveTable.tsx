@@ -20,9 +20,15 @@ export function LeaveTable() {
             return (
               <tr key={l.id} className="border-b border-border/60 last:border-0">
                 <td className="px-4 py-2">{crew?.name}</td>
-                <td className="px-4 py-2"><CrewStatusBadge status={l.status} /></td>
-                <td className="px-4 py-2 font-mono text-[12px] text-muted-foreground">{l.startDate}</td>
-                <td className="px-4 py-2 font-mono text-[12px] text-muted-foreground">{l.endDate}</td>
+                <td className="px-4 py-2">
+                  <CrewStatusBadge status={l.status} />
+                </td>
+                <td className="px-4 py-2 font-mono text-[12px] text-muted-foreground">
+                  {l.startDate}
+                </td>
+                <td className="px-4 py-2 font-mono text-[12px] text-muted-foreground">
+                  {l.endDate}
+                </td>
                 <td className="px-4 py-2 text-xs text-muted-foreground">{l.notes ?? "—"}</td>
               </tr>
             );

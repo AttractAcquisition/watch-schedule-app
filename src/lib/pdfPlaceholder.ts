@@ -1,8 +1,11 @@
 // Watch Schedule — PDF export placeholders.
 // TODO: call PDF generation Edge Function.
 
-export async function exportSchedulePdf(scheduleId: string, variant = "bridge") {
-  // TODO: invoke Edge Function export-schedule-pdf
-  console.info("[pdf placeholder] exportSchedulePdf", scheduleId, variant);
+export async function mockExportPdf(exportType = "bridge", scheduleId = "run_1") {
+  // TODO: Replace with Supabase Edge Function
+  // TODO: Apply RLS policies before production
+  console.info("[pdf placeholder] mockExportPdf", scheduleId, exportType);
   return { url: "#" };
 }
+
+export const exportSchedulePdf = mockExportPdf;

@@ -31,7 +31,12 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
                   : "text-sidebar-foreground/70 hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground")
               }
             >
-              <span>{item.label}</span>
+              <span>
+                <span className="block">{item.label}</span>
+                <span className="mt-0.5 block text-[10px] font-normal text-muted-foreground">
+                  {item.description}
+                </span>
+              </span>
               {active && <Compass className="h-3.5 w-3.5 opacity-70" />}
             </Link>
           );

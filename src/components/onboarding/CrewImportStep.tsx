@@ -10,7 +10,8 @@ export function CrewImportStep() {
       <CrewImportMockup onExtracted={setCrew} />
       {crew.length > 0 && (
         <div className="panel p-4 text-xs text-muted-foreground">
-          Extracted {crew.length} crew members — continue to review departments. (Mock data — TODO connect OCR.)
+          Extracted {crew.length} crew members — continue to review departments. (Mock data — TODO
+          connect OCR.)
         </div>
       )}
       {crew.length === 0 && (

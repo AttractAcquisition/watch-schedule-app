@@ -8,10 +8,9 @@ export function FairnessExplanation() {
         Plain-English Explanation
       </div>
       <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-        Watches this week are distributed evenly across eligible crew, with weekend and night blocks
-        balanced to within {100 - MOCK_FAIRNESS.weekendFairness} points of an ideal split. Crew
-        rotating into consecutive day-watch blocks have been flagged for captain review. Fairness
-        balancing offers professional scheduling support; captain approval is required before publishing.
+        Chris Morgan is next in rotation after Charter Mode ends because Alex Thomas and Ben Harris
+        were already assigned before the pause. Marco Rossi appears twice this week because only two
+        engineering crew are available for Engineering OOW.
       </p>
       <div className="mt-5 space-y-2">
         {MOCK_FAIRNESS.warnings.map((w, i) => (

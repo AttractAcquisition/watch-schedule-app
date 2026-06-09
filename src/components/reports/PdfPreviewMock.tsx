@@ -8,9 +8,15 @@ export function PdfPreviewMock() {
       </div>
       <div className="bg-white p-8 text-[#0B0B0B]">
         <div className="border-b border-black/20 pb-3">
-          <div className="text-[10px] uppercase tracking-[0.18em] text-black/60">Watch Schedule</div>
-          <div className="text-lg font-semibold tracking-tight">{MOCK_VESSEL.name} · Weekly Watch Rota</div>
-          <div className="text-[11px] text-black/60">Captain approval required before publishing.</div>
+          <div className="text-[10px] uppercase tracking-[0.18em] text-black/60">
+            Watch Schedule
+          </div>
+          <div className="text-lg font-semibold tracking-tight">
+            {MOCK_VESSEL.name} · Weekly Watch Rota
+          </div>
+          <div className="text-[11px] text-black/60">
+            Captain approval required before publishing.
+          </div>
         </div>
         <div className="mt-4 grid grid-cols-7 gap-1 text-[10px]">
           {Array.from({ length: 7 }).map((_, i) => (

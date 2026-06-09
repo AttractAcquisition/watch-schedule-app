@@ -7,8 +7,8 @@ export default function LeaveManagement() {
     <AppShell>
       <PageHeader
         eyebrow="Leave Management"
-        title="Crew availability & leave"
-        description="Record leave, sickness, training, and off-vessel status. Affected watches are flagged for regeneration."
+        title="Leave Management"
+        description="Mark crew as unavailable and regenerate only the affected watches."
       />
       <div className="grid gap-4 lg:grid-cols-5">
         <div className="lg:col-span-3">
@@ -16,6 +16,30 @@ export default function LeaveManagement() {
         </div>
         <div className="lg:col-span-2">
           <LeaveDateRangeForm />
+        </div>
+      </div>
+      <div className="mt-4 panel p-5">
+        <div className="text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
+          Affected watches
+        </div>
+        <p className="mt-2 text-sm">2 confirmed watches affected by this change.</p>
+        <div className="mt-3 space-y-2 text-sm text-muted-foreground">
+          <div>Fri 20:00-00:00 · Interior Watch · Second Stew Lisa Green</div>
+          <div>Sat 00:00-04:00 · Interior Watch · Second Stew Lisa Green</div>
+        </div>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <button className="rounded-md border border-border px-3 py-1.5 text-xs hover:bg-secondary">
+            Regenerate affected watches
+          </button>
+          <button className="rounded-md border border-border px-3 py-1.5 text-xs hover:bg-secondary">
+            Regenerate full schedule
+          </button>
+          <button className="rounded-md border border-border px-3 py-1.5 text-xs hover:bg-secondary">
+            Manually edit
+          </button>
+          <button className="rounded-md border border-border px-3 py-1.5 text-xs hover:bg-secondary">
+            Submit & Confirm
+          </button>
         </div>
       </div>
     </AppShell>

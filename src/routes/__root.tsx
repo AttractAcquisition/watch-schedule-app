@@ -64,7 +64,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "Professional watch scheduling for superyacht teams." },
       { name: "author", content: "Watch Schedule" },
       { property: "og:title", content: "Watch Schedule" },
-      { property: "og:description", content: "Professional watch scheduling for superyacht teams." },
+      {
+        property: "og:description",
+        content: "Professional watch scheduling for superyacht teams.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],

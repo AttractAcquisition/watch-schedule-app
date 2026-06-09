@@ -4,7 +4,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { MOCK_CHARTER } from "@/lib/mockData";
-import { pauseScheduleForCharter, resumeScheduleAfterCharter } from "@/lib/scheduleEnginePlaceholder";
+import {
+  pauseScheduleForCharter,
+  resumeScheduleAfterCharter,
+} from "@/lib/scheduleEnginePlaceholder";
 import { toast } from "sonner";
 
 export function CharterPausePanel() {
@@ -33,14 +36,20 @@ export function CharterPausePanel() {
         <button
           type="button"
           onClick={() => setScope("all")}
-          className={"rounded-md border px-3 py-2 text-sm " + (scope === "all" ? "border-foreground bg-secondary/40" : "border-border")}
+          className={
+            "rounded-md border px-3 py-2 text-sm " +
+            (scope === "all" ? "border-foreground bg-secondary/40" : "border-border")
+          }
         >
           Pause all watches
         </button>
         <button
           type="button"
           onClick={() => setScope("selected")}
-          className={"rounded-md border px-3 py-2 text-sm " + (scope === "selected" ? "border-foreground bg-secondary/40" : "border-border")}
+          className={
+            "rounded-md border px-3 py-2 text-sm " +
+            (scope === "selected" ? "border-foreground bg-secondary/40" : "border-border")
+          }
         >
           Pause selected watches
         </button>
@@ -53,6 +62,14 @@ export function CharterPausePanel() {
         <div className="flex items-center justify-between rounded-md border border-border px-3 py-2">
           <span>Keep security watch active</span>
           <Switch checked={keepSec} onCheckedChange={setKeepSec} />
+        </div>
+        <div className="flex items-center justify-between rounded-md border border-border px-3 py-2">
+          <span>Resume automatically</span>
+          <Switch defaultChecked />
+        </div>
+        <div className="flex items-center justify-between rounded-md border border-border px-3 py-2">
+          <span>Resume manually</span>
+          <Switch />
         </div>
       </div>
       <div className="mt-5 flex gap-2">
@@ -72,6 +89,9 @@ export function CharterPausePanel() {
           }}
         >
           Resume Schedule
+        </Button>
+        <Button variant="outline" onClick={() => toast("Draft pause saved (mock).")}>
+          Save Draft Pause
         </Button>
       </div>
     </div>

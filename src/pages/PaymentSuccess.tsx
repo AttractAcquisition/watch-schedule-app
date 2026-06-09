@@ -11,9 +11,9 @@ export default function PaymentSuccess() {
         <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-border">
           <Check className="h-5 w-5" />
         </div>
-        <h1 className="mt-5 text-xl font-semibold tracking-tight">Payment confirmed</h1>
+        <h1 className="mt-5 text-xl font-semibold tracking-tight">Subscription active</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Your subscription is active. Continue to vessel setup.
+          Your Watch Schedule subscription is ready. Continue to vessel setup.
         </p>
         <Button
           className="mt-6 w-full"
@@ -22,7 +22,7 @@ export default function PaymentSuccess() {
             navigate({ to: "/onboarding" });
           }}
         >
-          Continue to onboarding
+          Set up vessel
         </Button>
       </div>
     </div>
