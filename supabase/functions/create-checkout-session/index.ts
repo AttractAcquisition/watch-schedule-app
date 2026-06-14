@@ -58,6 +58,13 @@ Deno.serve(async (req: Request) => {
         metadata: { supabase_user_id: user.id },
       });
       customerId = customer.id;
+
+      // Pre-create the subscription row so Realtime can fire when the webhook
+      // updates it. The stripe-webhook function will overwrite status → "active".
+      await serviceClient.from("subscriptions").upsert(
+        { user_id: user.id, stripe_customer_id: customerId, status: "inactive" },
+        { onConflict: "user_id", ignoreDuplicates: true },
+      );
     }
 
     const session = await stripe.checkout.sessions.create({

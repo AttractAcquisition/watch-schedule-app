@@ -124,6 +124,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, [loadAppState]);
 
+  // Realtime listener: immediately re-loads app state when the stripe-webhook
+  // edge function updates the subscriptions row for the current user.
+  useEffect(() => {
+    const uid = session?.user.id;
+    if (!uid) return;
+
+    const channel = supabase
+      .channel(`sub-realtime-${uid}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "subscriptions",
+          filter: `user_id=eq.${uid}`,
+        },
+        () => {
+          if (activeUserId.current === uid) loadAppState(uid);
+        },
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [session?.user.id, loadAppState]);
+
   const signIn = useCallback<AuthContextValue["signIn"]>(async (email, password) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     return { error: error?.message ?? null };
