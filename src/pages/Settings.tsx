@@ -340,7 +340,7 @@ export default function Settings() {
             full_name: m.full_name,
             position: m.position ?? null,
             rank: m.rank ?? null,
-            department: (m.department as Department),
+            department: m.department as Department,
             watch_eligible: true,
             is_rotational: true,
             is_relief: false,
@@ -352,7 +352,9 @@ export default function Settings() {
       );
       invalidate();
       setImportedCrew([]);
-      toast.success(`${importedCrew.length} crew member${importedCrew.length === 1 ? "" : "s"} added.`);
+      toast.success(
+        `${importedCrew.length} crew member${importedCrew.length === 1 ? "" : "s"} added.`,
+      );
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to save imported crew.");
     } finally {
@@ -836,122 +838,123 @@ export default function Settings() {
         {/* ── Crew Database ── */}
         {activeSection === "crew-database" && (
           <div className="space-y-5">
-          <div className="panel p-5">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <SectionLabel>Crew Database</SectionLabel>
-                <h2 className="mt-1 font-display text-lg font-semibold">
-                  Watchkeeping crew roster
-                </h2>
+            <div className="panel p-5">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <SectionLabel>Crew Database</SectionLabel>
+                  <h2 className="mt-1 font-display text-lg font-semibold">
+                    Watchkeeping crew roster
+                  </h2>
+                </div>
+                <Button size="sm" variant="outline" onClick={() => setAddCrewOpen(true)}>
+                  <Plus className="h-4 w-4" /> Add crew member
+                </Button>
               </div>
-              <Button size="sm" variant="outline" onClick={() => setAddCrewOpen(true)}>
-                <Plus className="h-4 w-4" /> Add crew member
-              </Button>
-            </div>
 
-            <div className="mt-5 overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Department</TableHead>
-                    <TableHead>Rota</TableHead>
-                    <TableHead>Fairness</TableHead>
-                    <TableHead>Debt</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {crew.map((member) => {
-                    const draft = crewDrafts[member.id];
-                    const stored = persistedFairnessByCrew.get(member.id);
-                    const score =
-                      stored?.crew_fairness_score ?? fairnessByCrew.get(member.id) ?? null;
-                    const debt = stored?.fairness_debt ?? null;
-                    return (
-                      <TableRow key={member.id}>
-                        <TableCell className="font-medium">
-                          {draft?.fullName ?? member.full_name}
-                        </TableCell>
-                        <TableCell className="capitalize text-muted-foreground">
-                          {draft?.department ?? member.department ?? "—"}
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-2">
-                            <Switch
-                              checked={draft?.onRota ?? member.status === "active"}
-                              onCheckedChange={(checked) =>
-                                updateCrewDraft(member.id, { onRota: checked })
-                              }
-                              aria-label={`${member.full_name} rota availability`}
-                            />
-                            <span className="text-xs text-muted-foreground">
-                              {(draft?.onRota ?? member.status === "active") ? "On" : "Off"}
-                            </span>
-                          </div>
-                        </TableCell>
-                        <TableCell className="font-mono text-sm">
-                          {score !== null ? `${score}%` : "—"}
-                        </TableCell>
-                        <TableCell className="font-mono text-sm">
-                          {debt !== null ? String(debt) : "—"}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex items-center justify-end gap-2">
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => setEditingCrewId(member.id)}
-                            >
-                              <Pencil className="h-3 w-3" /> Edit
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="text-destructive hover:border-destructive/40 hover:bg-destructive/10"
-                              onClick={() => setArchiveConfirmId(member.id)}
-                            >
-                              Archive
-                            </Button>
-                          </div>
+              <div className="mt-5 overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Department</TableHead>
+                      <TableHead>Rota</TableHead>
+                      <TableHead>Fairness</TableHead>
+                      <TableHead>Debt</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {crew.map((member) => {
+                      const draft = crewDrafts[member.id];
+                      const stored = persistedFairnessByCrew.get(member.id);
+                      const score =
+                        stored?.crew_fairness_score ?? fairnessByCrew.get(member.id) ?? null;
+                      const debt = stored?.fairness_debt ?? null;
+                      return (
+                        <TableRow key={member.id}>
+                          <TableCell className="font-medium">
+                            {draft?.fullName ?? member.full_name}
+                          </TableCell>
+                          <TableCell className="capitalize text-muted-foreground">
+                            {draft?.department ?? member.department ?? "—"}
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-2">
+                              <Switch
+                                checked={draft?.onRota ?? member.status === "active"}
+                                onCheckedChange={(checked) =>
+                                  updateCrewDraft(member.id, { onRota: checked })
+                                }
+                                aria-label={`${member.full_name} rota availability`}
+                              />
+                              <span className="text-xs text-muted-foreground">
+                                {(draft?.onRota ?? member.status === "active") ? "On" : "Off"}
+                              </span>
+                            </div>
+                          </TableCell>
+                          <TableCell className="font-mono text-sm">
+                            {score !== null ? `${score}%` : "—"}
+                          </TableCell>
+                          <TableCell className="font-mono text-sm">
+                            {debt !== null ? String(debt) : "—"}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <div className="flex items-center justify-end gap-2">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => setEditingCrewId(member.id)}
+                              >
+                                <Pencil className="h-3 w-3" /> Edit
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="text-destructive hover:border-destructive/40 hover:bg-destructive/10"
+                                onClick={() => setArchiveConfirmId(member.id)}
+                              >
+                                Archive
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                    {!crew.length && (
+                      <TableRow>
+                        <TableCell
+                          colSpan={6}
+                          className="py-10 text-center text-sm text-muted-foreground"
+                        >
+                          No crew yet. Add watchkeepers before generating the daily schedule.
                         </TableCell>
                       </TableRow>
-                    );
-                  })}
-                  {!crew.length && (
-                    <TableRow>
-                      <TableCell
-                        colSpan={6}
-                        className="py-10 text-center text-sm text-muted-foreground"
-                      >
-                        No crew yet. Add watchkeepers before generating the daily schedule.
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-          </div>
-
-          {/* Photo import panel */}
-          <div className="space-y-3">
-            <CrewImportMockup onExtracted={setImportedCrew} />
-            {importedCrew.length > 0 && (
-              <div className="flex items-center justify-between rounded-md border border-border bg-background/50 px-4 py-3">
-                <span className="text-sm text-muted-foreground">
-                  {importedCrew.length} crew member{importedCrew.length === 1 ? "" : "s"} ready to add
-                </span>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm" onClick={() => setImportedCrew([])}>
-                    Discard
-                  </Button>
-                  <Button size="sm" disabled={savingImport} onClick={saveImportedCrew}>
-                    {savingImport ? "Saving…" : "Confirm & save crew"}
-                  </Button>
-                </div>
+                    )}
+                  </TableBody>
+                </Table>
               </div>
-            )}
-          </div>
+            </div>
+
+            {/* Photo import panel */}
+            <div className="space-y-3">
+              <CrewImportMockup onExtracted={setImportedCrew} />
+              {importedCrew.length > 0 && (
+                <div className="flex items-center justify-between rounded-md border border-border bg-background/50 px-4 py-3">
+                  <span className="text-sm text-muted-foreground">
+                    {importedCrew.length} crew member{importedCrew.length === 1 ? "" : "s"} ready to
+                    add
+                  </span>
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm" onClick={() => setImportedCrew([])}>
+                      Discard
+                    </Button>
+                    <Button size="sm" disabled={savingImport} onClick={saveImportedCrew}>
+                      {savingImport ? "Saving…" : "Confirm & save crew"}
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         )}
 

@@ -44,7 +44,9 @@ export function CrewImportMockup({ onExtracted }: CrewImportMockupProps) {
       if (result.crew.length === 0) {
         toast.warning("No crew members detected. Check the image is a crew list and try again.");
       } else {
-        toast.success(`Extracted ${result.crew.length} crew member${result.crew.length === 1 ? "" : "s"}.`);
+        toast.success(
+          `Extracted ${result.crew.length} crew member${result.crew.length === 1 ? "" : "s"}.`,
+        );
       }
 
       setExtracted(result.crew);
