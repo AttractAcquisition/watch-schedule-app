@@ -4,6 +4,7 @@ import { Pencil, Plus, RefreshCcw, Save, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { AppShell } from "@/components/layout/AppShell";
+import { CrewImportMockup } from "@/components/crew/CrewImportMockup";
 import { DevSubscriptionPanel } from "@/components/DevSubscriptionPanel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -51,6 +52,7 @@ import {
   updateVessel,
   upsertWatchSettings,
 } from "@/lib/api";
+import type { ExtractedCrewMember } from "@/lib/edgeFunctions";
 import { calculateLeaveImpact, generateSchedule, regenerateSchedule } from "@/lib/edgeFunctions";
 import { PLAN_LABEL } from "@/lib/constants";
 import { addMonths, toISODate, type DailyWatchAssignment } from "@/lib/dailySchedule";
@@ -323,6 +325,40 @@ export default function Settings() {
     status: "requested",
     notes: "",
   });
+
+  // ── Crew photo import state
+  const [importedCrew, setImportedCrew] = useState<ExtractedCrewMember[]>([]);
+  const [savingImport, setSavingImport] = useState(false);
+
+  async function saveImportedCrew() {
+    if (!vessel || !importedCrew.length) return;
+    setSavingImport(true);
+    try {
+      await Promise.all(
+        importedCrew.map((m) =>
+          createCrew(vessel.id, {
+            full_name: m.full_name,
+            position: m.position ?? null,
+            rank: m.rank ?? null,
+            department: (m.department as Department),
+            watch_eligible: true,
+            is_rotational: true,
+            is_relief: false,
+            crew_lifecycle_status: "active",
+            eligible_roles: [],
+            status: "active",
+          }),
+        ),
+      );
+      invalidate();
+      setImportedCrew([]);
+      toast.success(`${importedCrew.length} crew member${importedCrew.length === 1 ? "" : "s"} added.`);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Failed to save imported crew.");
+    } finally {
+      setSavingImport(false);
+    }
+  }
 
   // ── UI / dialog state
   const [saving, setSaving] = useState(false);
@@ -799,6 +835,7 @@ export default function Settings() {
 
         {/* ── Crew Database ── */}
         {activeSection === "crew-database" && (
+          <div className="space-y-5">
           <div className="panel p-5">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
@@ -894,6 +931,27 @@ export default function Settings() {
                 </TableBody>
               </Table>
             </div>
+          </div>
+
+          {/* Photo import panel */}
+          <div className="space-y-3">
+            <CrewImportMockup onExtracted={setImportedCrew} />
+            {importedCrew.length > 0 && (
+              <div className="flex items-center justify-between rounded-md border border-border bg-background/50 px-4 py-3">
+                <span className="text-sm text-muted-foreground">
+                  {importedCrew.length} crew member{importedCrew.length === 1 ? "" : "s"} ready to add
+                </span>
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm" onClick={() => setImportedCrew([])}>
+                    Discard
+                  </Button>
+                  <Button size="sm" disabled={savingImport} onClick={saveImportedCrew}>
+                    {savingImport ? "Saving…" : "Confirm & save crew"}
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
           </div>
         )}
 

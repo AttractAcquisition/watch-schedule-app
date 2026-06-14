@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { BRAND } from "@/lib/constants";
 import { useAuth } from "@/lib/auth";
 import { completeOnboarding, type OnboardingPayload } from "@/lib/api";
+import type { ExtractedCrewMember } from "@/lib/edgeFunctions";
 import type { PlanType, WatchMode } from "@/lib/types";
 
 const STEPS = [
@@ -35,6 +36,7 @@ export default function Onboarding() {
   const [step, setStep] = useState(0);
   const [vesselName, setVesselName] = useState("");
   const [timezone, setTimezone] = useState("UTC");
+  const [extractedCrew, setExtractedCrew] = useState<ExtractedCrewMember[]>([]);
   const [saving, setSaving] = useState(false);
   const navigate = useNavigate();
   const { user, subscription, refreshAppState } = useAuth();
@@ -51,7 +53,14 @@ export default function Onboarding() {
     }
     setSaving(true);
     try {
-      const crew: OnboardingPayload["crew"] = [];
+      const crew: OnboardingPayload["crew"] = extractedCrew.map((m) => ({
+        fullName: m.full_name,
+        position: m.position ?? undefined,
+        department: m.department,
+        watchEligible: true,
+        eligibleRoles: [],
+        status: "active" as const,
+      }));
 
       await completeOnboarding({
         userId: user.id,
@@ -117,7 +126,7 @@ export default function Onboarding() {
               <VesselSetupStep />
             </div>
           )}
-          {step === 1 && <CrewImportStep />}
+          {step === 1 && <CrewImportStep onCrewExtracted={setExtractedCrew} />}
           {step === 2 && <DepartmentReviewStep />}
           {step === 3 && <WatchModeStep />}
           {step === 4 && <RuleBuilder />}

@@ -179,3 +179,23 @@ export interface CreateCustomerPortalSessionResult {
 export function createCustomerPortalSession(payload: CreateCustomerPortalSessionPayload) {
   return invoke<CreateCustomerPortalSessionResult>("create-customer-portal-session", payload);
 }
+
+export interface ExtractedCrewMember {
+  full_name: string;
+  position: string | null;
+  rank: string | null;
+  department: "command" | "deck" | "interior" | "engineering" | "unassigned";
+}
+
+export interface ExtractCrewFromPhotoPayload {
+  image_base64: string;
+  media_type?: string;
+}
+
+export interface ExtractCrewFromPhotoResult {
+  crew: ExtractedCrewMember[];
+}
+
+export function extractCrewFromPhoto(payload: ExtractCrewFromPhotoPayload) {
+  return invoke<ExtractCrewFromPhotoResult>("extract-crew-from-photo", payload);
+}

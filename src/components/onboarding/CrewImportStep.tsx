@@ -1,23 +1,17 @@
-import { useState } from "react";
 import { CrewImportMockup } from "@/components/crew/CrewImportMockup";
-import type { CrewMember } from "@/lib/types";
+import type { ExtractedCrewMember } from "@/lib/edgeFunctions";
 
-export function CrewImportStep() {
-  const [crew, setCrew] = useState<CrewMember[]>([]);
+interface CrewImportStepProps {
+  onCrewExtracted?: (crew: ExtractedCrewMember[]) => void;
+}
+
+export function CrewImportStep({ onCrewExtracted }: CrewImportStepProps) {
   return (
     <div className="space-y-4">
-      <CrewImportMockup onExtracted={setCrew} />
-      {crew.length > 0 && (
-        <div className="panel p-4 text-xs text-muted-foreground">
-          Extracted {crew.length} crew members — continue to review departments. (Mock data — TODO
-          connect OCR.)
-        </div>
-      )}
-      {crew.length === 0 && (
-        <div className="text-xs text-muted-foreground">
-          You can skip this step and add crew from Settings after setup.
-        </div>
-      )}
+      <CrewImportMockup onExtracted={onCrewExtracted} />
+      <div className="text-xs text-muted-foreground">
+        You can skip this step and add crew from Settings after setup is complete.
+      </div>
     </div>
   );
 }

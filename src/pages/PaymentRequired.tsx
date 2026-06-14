@@ -20,7 +20,7 @@ export default function PaymentRequired() {
     try {
       const { url } = await createCheckoutSession({
         plan_type: planId,
-        success_url: `${window.location.origin}/?checkout=success`,
+        success_url: `${window.location.origin}/payment-success`,
         cancel_url: `${window.location.origin}/payment-required`,
       });
       window.location.href = url;

@@ -14,8 +14,19 @@ using (
 ) b
 where a.user_id = b.user_id and a.created_at > b.keep_from;
 
-alter table public.subscriptions
-  add constraint subscriptions_user_id_unique unique (user_id);
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_class c
+    join pg_namespace n on n.oid = c.relnamespace
+    where n.nspname = 'public'
+      and c.relname = 'subscriptions_user_id_unique'
+  ) then
+    alter table public.subscriptions
+      add constraint subscriptions_user_id_unique unique (user_id);
+  end if;
+end $$;
 
 -- Drop the dev-only client write policies.
 drop policy if exists subscriptions_insert_own on public.subscriptions;
