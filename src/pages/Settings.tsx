@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Pencil, Plus, RefreshCcw, Save, X } from "lucide-react";
+import { Pencil, Plus, RefreshCcw, Save, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { AppShell } from "@/components/layout/AppShell";
@@ -42,10 +42,10 @@ import {
 } from "@/hooks/data";
 import { useAuth } from "@/lib/auth";
 import {
-  archiveCrew,
   confirmScheduleRun,
   createCrew,
   createLeaveRequest,
+  deleteCrew,
   updateCrew,
   updateLeaveRequest,
   updateProfile,
@@ -366,7 +366,7 @@ export default function Settings() {
   const [saving, setSaving] = useState(false);
   const [regenerating, setRegenerating] = useState(false);
   const [editingCrewId, setEditingCrewId] = useState<string | null>(null);
-  const [archiveConfirmId, setArchiveConfirmId] = useState<string | null>(null);
+  const [pendingInclusionChanges, setPendingInclusionChanges] = useState<Record<string, boolean>>({});
   const [addCrewOpen, setAddCrewOpen] = useState(false);
   const [addCrewDraft, setAddCrewDraft] = useState<CrewDraft>(DEFAULT_CREW_DRAFT);
   const [addLeaveOpen, setAddLeaveOpen] = useState(false);
@@ -385,6 +385,8 @@ export default function Settings() {
 
   const rawHash = location.hash.slice(1);
   const activeSection: SettingsSection = HASH_TO_SECTION[rawHash] ?? "vessel";
+  const pendingInclusionCount = Object.keys(pendingInclusionChanges).length;
+  const hasPendingInclusionChanges = pendingInclusionCount > 0;
 
   // ── Effects: load from server data
   useEffect(() => {
@@ -410,6 +412,18 @@ export default function Settings() {
     }
     setCrewDrafts(nextDrafts);
   }, [crew]);
+
+  useEffect(() => {
+    if (!hasPendingInclusionChanges) return;
+
+    function warnBeforeUnload(event: BeforeUnloadEvent) {
+      event.preventDefault();
+      event.returnValue = "";
+    }
+
+    window.addEventListener("beforeunload", warnBeforeUnload);
+    return () => window.removeEventListener("beforeunload", warnBeforeUnload);
+  }, [hasPendingInclusionChanges]);
 
   useEffect(() => {
     const settings = watchSettings.data;
@@ -491,6 +505,57 @@ export default function Settings() {
     setCrewDrafts((drafts) => ({ ...drafts, [id]: { ...drafts[id], ...patch } }));
   }
 
+  function setPendingInclusion(member: CrewMemberRow, checked: boolean) {
+    setPendingInclusionChanges((changes) => {
+      const next = { ...changes };
+      if (checked === member.watch_eligible) delete next[member.id];
+      else next[member.id] = checked;
+      return next;
+    });
+  }
+
+  async function persistInclusionAndRegenerate() {
+    if (!vessel || !user) {
+      toast.error("Complete onboarding before regenerating a schedule.");
+      return;
+    }
+    const changes = Object.entries(pendingInclusionChanges);
+    if (!changes.length) return;
+
+    setRegenerating(true);
+    try {
+      await Promise.all(
+        changes.map(([id, watchEligible]) => updateCrew(id, { watch_eligible: watchEligible })),
+      );
+
+      const range = monthRange();
+      if (latestRun.data?.id) {
+        await regenerateSchedule({
+          schedule_run_id: latestRun.data.id,
+          mode: "full",
+          change_context: { reason: "crew_include_in_schedule_changed" },
+        });
+      } else {
+        const result = await generateSchedule({
+          vessel_id: vessel.id,
+          watch_template_id: templates.data?.[0]?.id,
+          start_date: range.start,
+          end_date: range.end,
+          watch_mode: "solo",
+        });
+        if (result.schedule_run_id) await confirmScheduleRun(result.schedule_run_id, user.id);
+      }
+
+      setPendingInclusionChanges({});
+      invalidate();
+      toast.success("Crew inclusion saved and schedule regenerated.");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Failed to save and regenerate.");
+    } finally {
+      setRegenerating(false);
+    }
+  }
+
   async function submitAddCrew() {
     if (!vessel || !addCrewDraft.fullName.trim()) {
       toast.error("Please enter a crew member name.");
@@ -519,14 +584,27 @@ export default function Settings() {
     }
   }
 
-  async function archiveCrewMember(id: string) {
+  async function deleteCrewMember(member: CrewMemberRow) {
+    const ok = window.confirm(
+      `Delete ${member.full_name} permanently? Existing schedule assignments for this crew member will also be removed.`,
+    );
+    if (!ok) return;
+
+    setSaving(true);
     try {
-      await archiveCrew(id);
+      await deleteCrew(member.id);
       invalidate();
-      setArchiveConfirmId(null);
-      toast.success("Crew member archived.");
+      setEditingCrewId(null);
+      setPendingInclusionChanges((changes) => {
+        const next = { ...changes };
+        delete next[member.id];
+        return next;
+      });
+      toast.success("Crew member deleted.");
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to archive crew member.");
+      toast.error(error instanceof Error ? error.message : "Failed to delete crew member.");
+    } finally {
+      setSaving(false);
     }
   }
 
@@ -754,12 +832,20 @@ export default function Settings() {
 
   // ── Tab navigation helper
   function goTo(section: SettingsSection) {
+    if (
+      hasPendingInclusionChanges &&
+      activeSection === "crew-database" &&
+      section !== "crew-database" &&
+      !window.confirm("You have unsaved crew inclusion changes. Leave without saving them?")
+    ) {
+      return;
+    }
     navigate(`/settings#${section}`, { replace: true });
   }
 
   // ── Editing crew member (reads from crewDrafts)
   const editingDraft = editingCrewId ? crewDrafts[editingCrewId] : null;
-  const archiveTarget = archiveConfirmId ? crew.find((m) => m.id === archiveConfirmId) : null;
+  const editingMember = editingCrewId ? crew.find((m) => m.id === editingCrewId) : null;
 
   return (
     <AppShell>
@@ -846,9 +932,23 @@ export default function Settings() {
                     Watchkeeping crew roster
                   </h2>
                 </div>
-                <Button size="sm" variant="outline" onClick={() => setAddCrewOpen(true)}>
-                  <Plus className="h-4 w-4" /> Add crew member
-                </Button>
+                <div className="flex flex-wrap gap-2">
+                  {hasPendingInclusionChanges && (
+                    <Button
+                      size="sm"
+                      onClick={persistInclusionAndRegenerate}
+                      disabled={saving || regenerating}
+                    >
+                      <RefreshCcw className="h-4 w-4" />
+                      {regenerating
+                        ? "Saving and regenerating..."
+                        : `Save changes and regenerate schedule (${pendingInclusionCount})`}
+                    </Button>
+                  )}
+                  <Button size="sm" variant="outline" onClick={() => setAddCrewOpen(true)}>
+                    <Plus className="h-4 w-4" /> Add crew member
+                  </Button>
+                </div>
               </div>
 
               <div className="mt-5 overflow-x-auto">
@@ -857,7 +957,7 @@ export default function Settings() {
                     <TableRow>
                       <TableHead>Name</TableHead>
                       <TableHead>Department</TableHead>
-                      <TableHead>Rota</TableHead>
+                      <TableHead>Include in schedule</TableHead>
                       <TableHead>Fairness</TableHead>
                       <TableHead>Debt</TableHead>
                       <TableHead className="text-right">Actions</TableHead>
@@ -867,6 +967,9 @@ export default function Settings() {
                     {crew.map((member) => {
                       const draft = crewDrafts[member.id];
                       const stored = persistedFairnessByCrew.get(member.id);
+                      const included = pendingInclusionChanges[member.id] ?? member.watch_eligible;
+                      const hasPendingInclusion =
+                        pendingInclusionChanges[member.id] !== undefined;
                       const score =
                         stored?.crew_fairness_score ?? fairnessByCrew.get(member.id) ?? null;
                       const debt = stored?.fairness_debt ?? null;
@@ -881,14 +984,20 @@ export default function Settings() {
                           <TableCell>
                             <div className="flex items-center gap-2">
                               <Switch
-                                checked={draft?.onRota ?? member.status === "active"}
-                                onCheckedChange={(checked) =>
-                                  updateCrewDraft(member.id, { onRota: checked })
-                                }
-                                aria-label={`${member.full_name} rota availability`}
+                                checked={included}
+                                onCheckedChange={(checked) => setPendingInclusion(member, checked)}
+                                aria-label={`${member.full_name} include in schedule`}
                               />
-                              <span className="text-xs text-muted-foreground">
-                                {(draft?.onRota ?? member.status === "active") ? "On" : "Off"}
+                              <span
+                                className={cn(
+                                  "text-xs",
+                                  hasPendingInclusion
+                                    ? "font-medium text-primary"
+                                    : "text-muted-foreground",
+                                )}
+                              >
+                                {included ? "Included" : "Excluded"}
+                                {hasPendingInclusion ? " (unsaved)" : ""}
                               </span>
                             </div>
                           </TableCell>
@@ -906,14 +1015,6 @@ export default function Settings() {
                                 onClick={() => setEditingCrewId(member.id)}
                               >
                                 <Pencil className="h-3 w-3" /> Edit
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                className="text-destructive hover:border-destructive/40 hover:bg-destructive/10"
-                                onClick={() => setArchiveConfirmId(member.id)}
-                              >
-                                Archive
                               </Button>
                             </div>
                           </TableCell>
@@ -1571,44 +1672,28 @@ export default function Settings() {
               <p className="text-[11px] text-muted-foreground">
                 Changes are saved to draft. Click "Save Settings Only" to persist to Supabase.
               </p>
-              <div className="flex justify-end">
-                <Button variant="outline" onClick={() => setEditingCrewId(null)}>
+              <div className="flex flex-col gap-3 border-t border-border pt-3 sm:flex-row sm:items-center sm:justify-between">
+                {editingMember && (
+                  <Button
+                    variant="outline"
+                    className="border-destructive/40 text-destructive hover:bg-destructive/10"
+                    onClick={() => deleteCrewMember(editingMember)}
+                    disabled={saving}
+                  >
+                    <Trash2 className="h-4 w-4" /> Delete member
+                  </Button>
+                )}
+                <Button
+                  variant="outline"
+                  className="sm:ml-auto"
+                  onClick={() => setEditingCrewId(null)}
+                  disabled={saving}
+                >
                   Done
                 </Button>
               </div>
             </div>
           )}
-        </DialogContent>
-      </Dialog>
-
-      {/* Archive confirm dialog */}
-      <Dialog
-        open={!!archiveConfirmId}
-        onOpenChange={(open) => {
-          if (!open) setArchiveConfirmId(null);
-        }}
-      >
-        <DialogContent className="max-w-sm">
-          <DialogHeader>
-            <DialogTitle>Archive crew member?</DialogTitle>
-          </DialogHeader>
-          <p className="text-sm text-muted-foreground">
-            {archiveTarget
-              ? `${archiveTarget.full_name} will be removed from the active rota.`
-              : "This crew member will be removed from the active rota."}
-          </p>
-          <div className="flex justify-end gap-2 pt-2">
-            <Button variant="outline" onClick={() => setArchiveConfirmId(null)}>
-              Cancel
-            </Button>
-            <Button
-              variant="outline"
-              className="border-destructive/40 text-destructive hover:bg-destructive/10"
-              onClick={() => archiveConfirmId && archiveCrewMember(archiveConfirmId)}
-            >
-              Archive
-            </Button>
-          </div>
         </DialogContent>
       </Dialog>
 

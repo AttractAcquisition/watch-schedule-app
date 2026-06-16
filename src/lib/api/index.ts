@@ -181,6 +181,11 @@ export async function updateCrew(id: string, patch: Partial<CrewMemberRow>) {
   return unwrap(await supabase.from("crew_members").update(patch).eq("id", id).select().single());
 }
 
+export async function deleteCrew(id: string) {
+  const { error } = await supabase.from("crew_members").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+}
+
 export async function archiveCrew(id: string) {
   return updateCrew(id, {
     crew_lifecycle_status: "archived",
