@@ -366,7 +366,9 @@ export default function Settings() {
   const [saving, setSaving] = useState(false);
   const [regenerating, setRegenerating] = useState(false);
   const [editingCrewId, setEditingCrewId] = useState<string | null>(null);
-  const [pendingInclusionChanges, setPendingInclusionChanges] = useState<Record<string, boolean>>({});
+  const [pendingInclusionChanges, setPendingInclusionChanges] = useState<Record<string, boolean>>(
+    {},
+  );
   const [addCrewOpen, setAddCrewOpen] = useState(false);
   const [addCrewDraft, setAddCrewDraft] = useState<CrewDraft>(DEFAULT_CREW_DRAFT);
   const [addLeaveOpen, setAddLeaveOpen] = useState(false);
@@ -968,8 +970,7 @@ export default function Settings() {
                       const draft = crewDrafts[member.id];
                       const stored = persistedFairnessByCrew.get(member.id);
                       const included = pendingInclusionChanges[member.id] ?? member.watch_eligible;
-                      const hasPendingInclusion =
-                        pendingInclusionChanges[member.id] !== undefined;
+                      const hasPendingInclusion = pendingInclusionChanges[member.id] !== undefined;
                       const score =
                         stored?.crew_fairness_score ?? fairnessByCrew.get(member.id) ?? null;
                       const debt = stored?.fairness_debt ?? null;
