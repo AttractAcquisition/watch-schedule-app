@@ -1,3 +1,8 @@
+# RETIRED REPO — DO NOT DEPLOY. The live product is watch-schedule-new, which shares
+# the Supabase project diepraznybnjlwryibod. Deploying edge functions/migrations from
+# THIS repo overwrites the LIVE backend. Do not run `supabase functions deploy` or
+# `supabase db push` here.
+
 # Watch Schedule — Supabase CLI config.
 # project_id is the local stack name; link the remote project with:
 #   supabase link --project-ref diepraznybnjlwryibod
